@@ -2,32 +2,25 @@ import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router';
 
+import LyricCreate from './LyricCreate';
+import LyricList from './LyricList';
 import fetchSongByID from '../queries/fetchSongByID';
 
 class SongDetail extends Component {
-  renderSong() {
-    return (
-      <li key={this.props.data.song.id} className="collection-item">
-        title: {this.props.data.song.title}
-      </li>
-    );
-  }
   render() {
-    let song = <div>Loading...</div>
-      if (!this.props.data.loading) {
-        song = (
-          <ul className="collection">
-            {this.renderSong()}
-          </ul>
-        )
-      }
+    const { song } = this.props.data;
+
+    if (!song) { return <div>Loading...</div> }
+
     return (
       <div>
         <Link to="/">
           Back
         </Link>
         <h3>Song Detail</h3>
-        {song}
+        {song.title}
+        <LyricList lyrics={song.lyrics} />
+        <LyricCreate songId={this.props.params.id}/>
       </div>
     )
   }
